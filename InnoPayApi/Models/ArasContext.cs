@@ -6,10 +6,6 @@ namespace InnoPayApi.Models;
 
 public partial class ArasContext : DbContext
 {
-    public ArasContext()
-    {
-    }
-
     public ArasContext(DbContextOptions<ArasContext> options)
         : base(options)
     {

@@ -2,18 +2,27 @@ using InnoPayApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore.Design;
+using Innovator.Client.Model;
+using Innovator.Server;
+using InnoPayApi.Repositories.Payment;
+using InnoPayApi.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("ArasContext");
+builder.Services.AddDbContext<ArasContext>(options => options.UseSqlServer(connectionString, options =>
+{
+    options.EnableRetryOnFailure();
+}));
+//µù¥URepository¨ìcontroller
+builder.Services.AddScoped(typeof(IRepositoryWrapper), typeof(RepositoryWrapper));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = builder.Configuration.GetConnectionString("ArasContext");
-builder.Services.AddDbContext<ArasContext>(options =>options.UseSqlServer(connectionString));
+
 
 var app = builder.Build();
 
